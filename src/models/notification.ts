@@ -1,12 +1,9 @@
 import { z } from "zod"
 
-export const notificationSchema = z.object({
+export const notificationBody = z.object({
   type: z.enum(["sms", "email"]),
-  to: z.string().nonempty("Recipient is required"),
-  body: z.string().optional(),
-  subject: z.string().optional(),
-  text: z.string().optional(),
-  html: z.string().optional(),
+  recipient: z.string().nonempty("Recipient is required"),
+  message: z.string(),
 })
 
 export interface Notification {
