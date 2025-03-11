@@ -17,8 +17,8 @@ export class NotificationService {
       if (notification.type === "email") {
         await this.emailService.sendEmail(
           notification.recipient,
+          (notification.subject = "Fidamy Notification"),
           notification.message,
-          notification.subject!,
         )
       } else if (notification.type === "sms") {
         await this.smsService.sendSms(

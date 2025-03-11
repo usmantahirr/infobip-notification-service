@@ -1,33 +1,49 @@
+import axios from "axios"
 import dotenv from "dotenv"
-import twilio from "twilio"
 
 import logger from "../config/logger"
 
 dotenv.config()
 
 export class SmsService {
-  private client: twilio.Twilio
-  private readonly phoneNumber: string
+  private apiKey: string
+  private baseUrl: string
+  private senderNumber: string
 
   constructor() {
-    this.client = twilio(
-      process.env.TWILIO_ACCOUNT_SID,
-      process.env.TWILIO_AUTH_TOKEN,
-    )
-    this.phoneNumber = process.env.TWILIO_PHONE_NUMBER || ""
+    this.apiKey = process.env.INFOBIP_API_KEY || ""
+    this.baseUrl = process.env.INFOBIP_BASE_URL || ""
+    this.senderNumber = process.env.INFOBIP_SENDER_NUMBER || ""
   }
 
-  async sendSms(recipient: string, message: string): Promise<string> {
+  async sendSms(recipient: string, message: string) {
     try {
-      logger.info(`Sending SMS to ${recipient}`)
-      const messageBody = await this.client.messages.create({
-        body: message,
-        from: this.phoneNumber,
-        to: recipient,
+      const body = {
+        messages: [
+          {
+            from: this.senderNumber,
+            destinations: [
+              {
+                to: recipient,
+              },
+            ],
+            text: message,
+          },
+        ],
+      }
+
+      const url = `https://${this.baseUrl}/sms/2/text/advanced`
+
+      const response = axios.post(url, body, {
+        headers: {
+          Authorization: `App ${this.apiKey}`,
+          "Content-Type": "application/json",
+        },
       })
-      return Promise.resolve(messageBody.sid)
+      logger.info(`SMS sent successfully to ${recipient}`, response)
+      return response
     } catch (error) {
-      logger.error(`Failed to send SMS to ${recipient}: ${error}`)
+      logger.error(`Failed to send SMS: ${error}`)
       throw new Error("SMS sending failed")
     }
   }
