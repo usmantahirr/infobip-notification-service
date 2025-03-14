@@ -12,5 +12,6 @@ export interface Notification {
   recipient: string
   message: string
   subject?: string
+  file?:  Express.Multer.File
   createdAt: Date
 }

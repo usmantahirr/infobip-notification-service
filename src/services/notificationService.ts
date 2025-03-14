@@ -1,7 +1,9 @@
+import { AxiosResponse } from "axios"
 import logger from "../config/logger"
 import { Notification } from "../models/notification"
 import { EmailService } from "./emailService"
 import { SmsService } from "./smsService"
+
 
 export class NotificationService {
   private emailService: EmailService
@@ -12,23 +14,23 @@ export class NotificationService {
     this.smsService = new SmsService()
   }
 
-  async sendNotification(notification: Notification): Promise<void> {
+  async sendNotification(notification: Notification): Promise<AxiosResponse> {
     try {
       if (notification.type === "email") {
-        await this.emailService.sendEmail(
+        return await this.emailService.sendEmail(
           notification.recipient,
           (notification.subject = "Fidamy Notification"),
           notification.message,
+          notification.file,
         )
       } else if (notification.type === "sms") {
-        await this.smsService.sendSms(
+        return await this.smsService.sendSms(
           notification.recipient,
           notification.message,
         )
       } else {
         throw new Error("Unsupported notification type")
       }
-      logger.info(`Notification sent successfully to ${notification.recipient}`)
     } catch (error) {
       logger.error(`Error sending notification: ${error}`)
       throw error
