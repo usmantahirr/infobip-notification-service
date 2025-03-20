@@ -4,19 +4,22 @@ import logger from "../config/logger"
 
 interface ErrorType extends Error {
   status?: number
+  details?: any
 }
 
-const errorHandler = (
-  err: ErrorType,
-  req: Request,
-  res: Response,
-  next: NextFunction,
-): void => {
-  logger.error(`Error: ${err.message}`)
+const errorHandler = (err: ErrorType, req: Request, res: Response): void => {
+  const statusCode = err.status || 500
+  const errorMessage = err.message || "Internal Server Error"
 
-  res.status(err.status || 500).json({
+  logger.error(`Error: ${errorMessage}`)
+  if (err.details) {
+    logger.error(`Details: ${JSON.stringify(err.details)}`)
+  }
+
+  res.status(statusCode).json({
     success: false,
-    message: err.message || "Internal Server Error",
+    message: errorMessage,
+    ...(process.env.NODE_ENV === "development" && { stack: err.stack }),
   })
 }
 

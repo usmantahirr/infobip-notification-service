@@ -3,8 +3,11 @@ import { Request } from "express"
 import multer, { FileFilterCallback } from "multer"
 import path from "path"
 
+const storage = multer.memoryStorage()
+
 const upload = multer({
   limits: { fileSize: 2 * 1024 * 1024 }, // 2MB
+  storage,
   fileFilter: (
     req: Request,
     file: Express.Multer.File,
