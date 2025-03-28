@@ -1,54 +1,84 @@
 # Infobip Notification Service
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.7.3-blue.svg)](https://www.typescriptlang.org/)
-[![Node.js](https://img.shields.io/badge/Node.js-14.0.0-green.svg)](https://nodejs.org/)
-[![Express](https://img.shields.io/badge/Express-4.21.2-black.svg)](https://expressjs.com/)
-[![Infobip](https://img.shields.io/badge/Infobip-API-orange.svg)](https://www.infobip.com/)
+A TypeScript-based service for sending email and SMS notifications using Infobip's API. This service provides a simple and secure way to integrate Infobip's messaging capabilities into your applications.
 
-A robust TypeScript-based service for sending email and SMS notifications using Infobip's API. This service provides a simple and secure way to integrate Infobip's messaging capabilities into your applications.
+## 📚 Documentation
 
-## Technical Deep Dive
+For detailed documentation, please visit our [Wiki](https://github.com/usmantahirr/infobip-notification-service/wiki):
 
-For a detailed technical overview of the project, including architecture decisions, technology choices, and implementation details, check out our [Technical Blog Post](TECHNICAL_BLOG.md). This comprehensive guide covers:
+- [Architecture Overview](https://github.com/usmantahirr/infobip-notification-service/wiki/Architecture-Overview)
+- [API Documentation](https://github.com/usmantahirr/infobip-notification-service/wiki/API-Documentation)
+- [Deployment Guide](https://github.com/usmantahirr/infobip-notification-service/wiki/Deployment-Guide)
+- [Contributing Guidelines](https://github.com/usmantahirr/infobip-notification-service/wiki/Contributing-Guidelines)
+- [FAQ](https://github.com/usmantahirr/infobip-notification-service/wiki/FAQ)
 
-- Technology stack and reasoning behind each choice
-- Architectural decisions and design patterns
-- Security implementations and best practices
-- Error handling strategies
-- API documentation approach
-- Technical challenges and solutions
-- Future improvements and scaling considerations
+## 🚀 Quick Start
 
-## System Architecture
+1. Install the package:
 
-For a visual representation of the system architecture, including component relationships, data flow, and security implementation, check out our [Architecture Diagrams](ARCHITECTURE.md). The diagrams include:
+   ```bash
+   npm install infobip-notification-service
+   ```
 
-- System overview and component relationships
-- Request flow and processing
-- Component architecture and dependencies
-- Security implementation layers
-- Error handling flow
-- Data validation process
+2. Initialize the client:
 
-## Features
+   ```javascript
+   const { NotificationService } = require("infobip-notification-service")
 
-- 📧 Send email notifications with optional file attachments
-- 📱 Send SMS notifications
-- 📎 File attachment support for emails (PDF, DOC, DOCX, JPG, PNG)
-- 🔒 Input validation using Zod
-- 📝 OpenAPI/Swagger documentation
-- 🚦 Rate limiting
-- 📊 Request logging
-- 🔍 Error handling and monitoring
+   const client = new NotificationService({
+     apiKey: "YOUR_API_KEY",
+     baseUrl: "YOUR_BASE_URL",
+   })
+   ```
 
-## Prerequisites
+3. Send notifications:
 
-- Node.js (v14 or higher)
-- npm or yarn
-- An Infobip account for both email and SMS notifications
+   ```javascript
+   // Send SMS
+   await client.sendSMS({
+     recipient: "+1234567890",
+     message: "Your verification code is: 123456",
+   })
 
-## Installation
+   // Send Email
+   await client.sendEmail({
+     recipient: "user@example.com",
+     subject: "Welcome",
+     message: "Welcome to our platform!",
+   })
+   ```
+
+## 🛠️ Tech Stack
+
+- **Runtime**: Node.js with TypeScript
+- **Framework**: Express.js
+- **Validation**: Zod
+- **Documentation**: OpenAPI/Swagger
+- **Logging**: Winston
+- **Security**: Helmet, CORS
+- **API**: Infobip
+
+## 🔧 Configuration
+
+Create a `.env` file with your configuration:
+
+```env
+# Application
+NODE_ENV=development
+PORT=3000
+
+# Infobip
+INFOBIP_API_KEY=your_api_key
+INFOBIP_BASE_URL=your_base_url
+INFOBIP_SENDER_EMAIL=your_verified_sender_email
+INFOBIP_SENDER_NUMBER=your_sender_number
+
+# Rate Limiting
+RATE_LIMIT_WINDOW=60000
+RATE_LIMIT_MAX_REQUESTS=100
+```
+
+## 📦 Installation
 
 1. Clone the repository:
 
@@ -61,142 +91,46 @@ For a visual representation of the system architecture, including component rela
 
    ```bash
    npm install
-   # or
-   yarn install
    ```
 
-3. Create a `.env` file:
+3. Set up environment:
 
    ```bash
    cp .env.example .env
+   # Edit .env with your credentials
    ```
 
-4. Configure your Infobip credentials in `.env`:
-   ```
-   INFOBIP_API_KEY=your_api_key
-   INFOBIP_BASE_URL=your_base_url
-   INFOBIP_SENDER_EMAIL=your_verified_email
-   INFOBIP_SENDER_NUMBER=your_sender_number
+4. Start the service:
+   ```bash
+   npm run dev
    ```
 
-## Configuration
+## 🤝 Contributing
 
-### Infobip Setup
+We welcome contributions! Please see our [Contributing Guidelines](https://github.com/usmantahirr/infobip-notification-service/wiki/Contributing-Guidelines) for details.
 
-1. Create an Infobip account
-2. Generate an API key
-3. Verify your sender email
-4. Get your sender number for SMS
-5. Add the credentials to your `.env` file
-
-## Running the Service
-
-### Development
-
-```bash
-npm run dev
-# or
-yarn dev
-```
-
-### Production
-
-```bash
-npm run build
-npm start
-# or
-yarn build
-yarn start
-```
-
-The service will start on `http://localhost:3000` (or the port specified in your `.env` file).
-
-## API Documentation
-
-Once the service is running, you can access the API documentation at:
-
-```
-http://localhost:3000/api-docs
-```
-
-### Available Endpoints
-
-#### Send Email
-
-```
-POST /notifications/email
-Content-Type: multipart/form-data
-
-{
-  "type": "email",
-  "recipient": "user@example.com",
-  "subject": "Important Notification",
-  "message": "This is an important email notification.",
-  "attachment": [file] // Optional
-}
-```
-
-#### Send SMS
-
-```
-POST /notifications/sms
-Content-Type: application/json
-
-{
-  "type": "sms",
-  "recipient": "+1234567890",
-  "message": "Your verification code is: 123456"
-}
-```
-
-## Rate Limiting
-
-The service implements rate limiting to prevent abuse:
-
-- 100 requests per minute per IP
-- 1000 requests per hour per API key
-
-## File Attachments
-
-Email notifications support file attachments with the following specifications:
-
-- Maximum file size: 2MB
-- Supported formats: PDF, DOC, DOCX, JPG, PNG
-- Only available for email notifications
-
-## Error Handling
-
-The service provides detailed error responses for various scenarios:
-
-- 400: Invalid request parameters or validation errors
-- 500: Internal server errors or service unavailability
-
-## Contributing
-
-We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) for details.
-
-## Code of Conduct
-
-This project and everyone participating in it is governed by our [Code of Conduct](CODE_OF_CONDUCT.md).
-
-## Security
-
-For security concerns, please see our [Security Policy](SECURITY.md).
-
-## License
+## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## Support
+## 🆘 Support
 
-For support, please:
+- [GitHub Issues](https://github.com/usmantahirr/infobip-notification-service/issues)
+- [Documentation](https://github.com/usmantahirr/infobip-notification-service/wiki/Home)
+- [API Reference](https://github.com/usmantahirr/infobip-notification-service/wiki/API-Documentation)
+- Email: support@your-domain.com
 
-- Open an issue in the [GitHub repository](https://github.com/usmantahirr/infobip-notification-service/issues)
-- Contact the maintainer at [hello@usman.tahir.com](mailto:hello@usman.tahir.com)
+## 🙏 Acknowledgments
 
-## Acknowledgments
+- Infobip for providing the messaging API
+- Express.js for the web framework
+- TypeScript for type safety
+- Zod for runtime type validation
+- All contributors to this project
 
-- [Infobip](https://www.infobip.com/) for providing the messaging API
-- [Express.js](https://expressjs.com/) for the web framework
-- [TypeScript](https://www.typescriptlang.org/) for type safety
-- [Zod](https://zod.dev/) for runtime type validation
+---
+
+<div align="center">
+  <p>Built with ❤️ by Usman Tahir</p>
+  <p>Last updated: March 2025</p>
+</div>
