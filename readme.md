@@ -1,36 +1,176 @@
-## 🔒 Security Features Included
-- ✔ Helmet: Protects against common security threats.
-- ✔ CORS: Restricts cross-origin requests.
-- ✔ Rate Limiting: Prevents abuse and DoS attacks.
-- ✔ Centralized Logging: Logs errors and system events using Winston.
-- ✔ Centralized Error Handling: Ensures consistent error messages and prevents app crashes.
-- ✔ Zod Validation Middleware: Validates request bodies before hitting business logic.
+# Infobip Notification Service
 
-## ✅ Next Steps
-- **Implement Logging for All Requests:**
-Add a middleware to log all incoming requests before processing them.
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.7.3-blue.svg)](https://www.typescriptlang.org/)
+[![Node.js](https://img.shields.io/badge/Node.js-14.0.0-green.svg)](https://nodejs.org/)
+[![Express](https://img.shields.io/badge/Express-4.21.2-black.svg)](https://expressjs.com/)
+[![Infobip](https://img.shields.io/badge/Infobip-API-orange.svg)](https://www.infobip.com/)
 
-- **Add Authentication Middleware (JWT or OAuth2):**
-Ensure that only authorized users can send notifications.
+A robust TypeScript-based service for sending email and SMS notifications using Infobip's API. This service provides a simple and secure way to integrate Infobip's messaging capabilities into your applications.
 
-- **Use a Process Manager (e.g., PM2):**
-Deploy the API using a process manager to handle crashes gracefully.
+## Features
 
-- **Integrate Monitoring & Alerts (e.g., Sentry, LogRocket):**
-Capture runtime errors for debugging in production.
+- 📧 Send email notifications with optional file attachments
+- 📱 Send SMS notifications
+- 📎 File attachment support for emails (PDF, DOC, DOCX, JPG, PNG)
+- 🔒 Input validation using Zod
+- 📝 OpenAPI/Swagger documentation
+- 🚦 Rate limiting
+- 📊 Request logging
+- 🔍 Error handling and monitoring
 
-- Add message templates for common notification types
-- Implement a queue system for high-volume messaging
-- Add support for WhatsApp messages (also available through Twilio)
-- Consider implementing delivery status tracking
+## Prerequisites
 
-## Environment Variables example
+- Node.js (v14 or higher)
+- npm or yarn
+- An Infobip account for both email and SMS notifications
+
+## Installation
+
+1. Clone the repository:
+
+   ```bash
+   git clone https://github.com/yourusername/infobip-notification-service.git
+   cd infobip-notification-service
+   ```
+
+2. Install dependencies:
+
+   ```bash
+   npm install
+   # or
+   yarn install
+   ```
+
+3. Create a `.env` file:
+
+   ```bash
+   cp .env.example .env
+   ```
+
+4. Configure your Infobip credentials in `.env`:
+   ```
+   INFOBIP_API_KEY=your_api_key
+   INFOBIP_BASE_URL=your_base_url
+   INFOBIP_SENDER_EMAIL=your_verified_email
+   INFOBIP_SENDER_NUMBER=your_sender_number
+   ```
+
+## Configuration
+
+### Infobip Setup
+
+1. Create an Infobip account
+2. Generate an API key
+3. Verify your sender email
+4. Get your sender number for SMS
+5. Add the credentials to your `.env` file
+
+## Running the Service
+
+### Development
+
 ```bash
-PORT=3000
-TWILIO_ACCOUNT_SID=""
-TWILIO_AUTH_TOKEN=""
-TWILIO_PHONE_NUMBER=""
-
-SENDGRID_API_KEY=""
-SENDGRID_FROM_EMAIL=""
+npm run dev
+# or
+yarn dev
 ```
+
+### Production
+
+```bash
+npm run build
+npm start
+# or
+yarn build
+yarn start
+```
+
+The service will start on `http://localhost:3000` (or the port specified in your `.env` file).
+
+## API Documentation
+
+Once the service is running, you can access the API documentation at:
+
+```
+http://localhost:3000/api-docs
+```
+
+### Available Endpoints
+
+#### Send Email
+
+```
+POST /notifications/email
+Content-Type: multipart/form-data
+
+{
+  "type": "email",
+  "recipient": "user@example.com",
+  "subject": "Important Notification",
+  "message": "This is an important email notification.",
+  "attachment": [file] // Optional
+}
+```
+
+#### Send SMS
+
+```
+POST /notifications/sms
+Content-Type: application/json
+
+{
+  "type": "sms",
+  "recipient": "+1234567890",
+  "message": "Your verification code is: 123456"
+}
+```
+
+## Rate Limiting
+
+The service implements rate limiting to prevent abuse:
+
+- 100 requests per minute per IP
+- 1000 requests per hour per API key
+
+## File Attachments
+
+Email notifications support file attachments with the following specifications:
+
+- Maximum file size: 2MB
+- Supported formats: PDF, DOC, DOCX, JPG, PNG
+- Only available for email notifications
+
+## Error Handling
+
+The service provides detailed error responses for various scenarios:
+
+- 400: Invalid request parameters or validation errors
+- 500: Internal server errors or service unavailability
+
+## Contributing
+
+We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) for details.
+
+## Code of Conduct
+
+This project and everyone participating in it is governed by our [Code of Conduct](CODE_OF_CONDUCT.md).
+
+## Security
+
+For security concerns, please see our [Security Policy](SECURITY.md).
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Support
+
+For support, please open an issue in the GitHub repository or contact the maintainers.
+
+## Acknowledgments
+
+- [Infobip](https://www.infobip.com/) for providing the messaging API
+- [Express.js](https://expressjs.com/) for the web framework
+- [TypeScript](https://www.typescriptlang.org/) for type safety
+- [Zod](https://zod.dev/) for runtime type validation

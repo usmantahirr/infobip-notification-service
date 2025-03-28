@@ -1,21 +1,43 @@
 {
-  "name": "email-notification-service",
+  "name": "infobip-notification-service",
   "version": "1.0.0",
   "type": "module",
+  "description": "A robust TypeScript-based service for sending email and SMS notifications using Infobip's API",
+  "main": "dist/app.js",
   "scripts": {
     "start": "node dist/app.js",
     "dev": "nodemon",
     "build": "tsc",
-    "prettier": "prettier --write ."
+    "prettier": "prettier --write .",
+    "lint": "eslint . --ext .ts",
+    "test": "jest",
+    "prepare": "husky install"
   },
-  "keywords": [],
-  "author": "Usman Tahir <usman.tahir@fidamy.com>",
-  "license": "ISC",
-  "description": "",
+  "keywords": [
+    "email",
+    "sms",
+    "notifications",
+    "infobip",
+    "typescript",
+    "express",
+    "api",
+    "nodejs",
+    "email-service",
+    "sms-service"
+  ],
+  "author": "Infobip Notification Service Contributors",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yourusername/infobip-notification-service.git"
+  },
+  "bugs": {
+    "url": "https://github.com/yourusername/infobip-notification-service/issues"
+  },
+  "homepage": "https://github.com/yourusername/infobip-notification-service#readme",
   "dependencies": {
     "@asteasolutions/zod-to-openapi": "^7.3.0",
     "@infobip-api/sdk": "^0.3.2",
-    "@sendgrid/mail": "^8.1.4",
     "@types/express": "^5.0.0",
     "@types/node": "^22.13.5",
     "axios": "^1.8.2",
@@ -29,7 +51,6 @@
     "nodemon": "^3.1.9",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1",
-    "twilio": "^5.4.5",
     "typescript": "^5.7.3",
     "uuid": "^11.1.0",
     "winston": "^3.17.0",
@@ -46,8 +67,19 @@
     "eslint-config-prettier": "^10.0.2",
     "eslint-plugin-n": "^17.15.1",
     "eslint-plugin-prettier": "^5.2.3",
+    "husky": "^8.0.3",
+    "lint-staged": "^15.2.0",
     "prettier": "^3.5.2",
     "ts-node": "^10.9.2",
     "tsconfig-paths": "^4.2.0"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "lint-staged": {
+    "*.{js,ts}": [
+      "eslint --fix",
+      "prettier --write"
+    ]
   }
 }
