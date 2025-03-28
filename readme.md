@@ -147,5 +147,5 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 <div align="center">
   <p>Built with ❤️ by Usman Tahir</p>
-  <p>Last updated: March 2024</p>
+  <p>Last updated: March 2025</p>
 </div>

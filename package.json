@@ -2,6 +2,7 @@
   "name": "infobip-notification-service",
   "version": "1.0.0",
   "description": "A starter project for sending email and SMS notifications using Infobip's API with Express.js and TypeScript",
+  "type": "module",
   "scripts": {
     "start": "node dist/app.js",
     "dev": "nodemon",
