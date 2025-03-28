@@ -1,7 +1,4 @@
-import { extendZodWithOpenApi } from "@asteasolutions/zod-to-openapi"
 import { z } from "zod"
-
-extendZodWithOpenApi(z)
 
 export const NotificationTypeSchema = z.enum(["email", "sms"], {
   description: "Type of notification to send",
