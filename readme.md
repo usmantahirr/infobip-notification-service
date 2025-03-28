@@ -14,38 +14,53 @@ For detailed documentation, please visit our [Wiki](https://github.com/usmantahi
 
 ## 🚀 Quick Start
 
-1. Install the package:
+1. Clone the repository:
 
    ```bash
-   npm install infobip-notification-service
+   git clone https://github.com/usmantahirr/infobip-notification-service.git
+   cd infobip-notification-service
    ```
 
-2. Initialize the client:
+2. Install dependencies:
 
-   ```javascript
-   const { NotificationService } = require("infobip-notification-service")
-
-   const client = new NotificationService({
-     apiKey: "YOUR_API_KEY",
-     baseUrl: "YOUR_BASE_URL",
-   })
+   ```bash
+   npm install
    ```
 
-3. Send notifications:
+3. Set up environment:
 
-   ```javascript
-   // Send SMS
-   await client.sendSMS({
-     recipient: "+1234567890",
-     message: "Your verification code is: 123456",
-   })
+   ```bash
+   cp .env.example .env
+   # Edit .env with your Infobip credentials
+   ```
 
-   // Send Email
-   await client.sendEmail({
-     recipient: "user@example.com",
-     subject: "Welcome",
-     message: "Welcome to our platform!",
-   })
+4. Start the development server:
+
+   ```bash
+   npm run dev
+   ```
+
+5. Send notifications using the API:
+
+   ```bash
+   # Send SMS
+   curl -X POST http://localhost:3000/api/v1/notifications/sms \
+     -H "Content-Type: application/json" \
+     -H "Authorization: Bearer YOUR_API_KEY" \
+     -d '{
+       "recipient": "+1234567890",
+       "message": "Your verification code is: 123456"
+     }'
+
+   # Send Email
+   curl -X POST http://localhost:3000/api/v1/notifications/email \
+     -H "Content-Type: application/json" \
+     -H "Authorization: Bearer YOUR_API_KEY" \
+     -d '{
+       "recipient": "user@example.com",
+       "subject": "Welcome",
+       "message": "Welcome to our platform!"
+     }'
    ```
 
 ## 🛠️ Tech Stack
@@ -132,5 +147,5 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 <div align="center">
   <p>Built with ❤️ by Usman Tahir</p>
-  <p>Last updated: March 2025</p>
+  <p>Last updated: March 2024</p>
 </div>
