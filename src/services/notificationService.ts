@@ -1,9 +1,9 @@
 import { AxiosResponse } from "axios"
+
 import logger from "../config/logger"
-import { Notification } from "../models/notification"
+import { Notification } from "../schemas"
 import { EmailService } from "./emailService"
 import { SmsService } from "./smsService"
-
 
 export class NotificationService {
   private emailService: EmailService
@@ -19,7 +19,7 @@ export class NotificationService {
       if (notification.type === "email") {
         return await this.emailService.sendEmail(
           notification.recipient,
-          (notification.subject = "Fidamy Notification"),
+          notification.subject || "Fidamy Notification",
           notification.message,
           notification.file,
         )

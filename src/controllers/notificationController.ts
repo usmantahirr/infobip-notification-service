@@ -5,9 +5,8 @@ import { v4 as uuidv4 } from "uuid"
 import logger from "../config/logger"
 import upload from "../config/upload"
 import { FileError, ValidationError } from "../errors/AppError"
-import { Notification } from "../models/notification"
+import { Notification, NotificationRequestSchema } from "../schemas"
 import { NotificationService } from "../services/notificationService"
-import { notificationSchema } from "../validations/notificationSchema"
 
 export class NotificationController {
   private notificationService: NotificationService
@@ -28,8 +27,7 @@ export class NotificationController {
       }
 
       try {
-        // Validate request body
-        const validationResult = notificationSchema.safeParse(req.body)
+        const validationResult = NotificationRequestSchema.safeParse(req.body)
         if (!validationResult.success) {
           const errors = validationResult.error.errors.map((err) => err.message)
           return next(new ValidationError(errors.join(", ")))
