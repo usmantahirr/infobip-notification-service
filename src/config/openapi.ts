@@ -26,8 +26,9 @@ registry.register("Error", ErrorSchema)
 registry.registerPath({
   method: "post",
   path: "/notifications/email",
-  description: "Send an email notification",
+  description: "Send an email notification with optional file attachment",
   tags: ["Notifications"],
+  summary: "Send Email",
   request: {
     body: {
       content: {
@@ -36,7 +37,14 @@ registry.registerPath({
           encoding: {
             attachment: {
               contentType: "application/octet-stream",
+              description: "Optional file attachment (max 2MB)",
             },
+          },
+          example: {
+            type: "email",
+            recipient: "user@example.com",
+            subject: "Important Notification",
+            message: "This is an important email notification.",
           },
         },
       },
@@ -48,22 +56,38 @@ registry.registerPath({
       content: {
         "application/json": {
           schema: NotificationResponseSchema,
+          example: {
+            success: true,
+            id: "123e4567-e89b-12d3-a456-426614174000",
+            response: {
+              messageId: "msg-123",
+              status: "DELIVERED",
+            },
+          },
         },
       },
     },
     400: {
-      description: "Invalid request parameters",
+      description: "Invalid request parameters or validation error",
       content: {
         "application/json": {
           schema: ErrorSchema,
+          example: {
+            status: "error",
+            message: "Invalid email format or missing required fields",
+          },
         },
       },
     },
     500: {
-      description: "Server error",
+      description: "Internal server error or service unavailable",
       content: {
         "application/json": {
           schema: ErrorSchema,
+          example: {
+            status: "error",
+            message: "Failed to send email due to service error",
+          },
         },
       },
     },
@@ -73,13 +97,19 @@ registry.registerPath({
 registry.registerPath({
   method: "post",
   path: "/notifications/sms",
-  description: "Send an SMS notification",
+  description: "Send an SMS notification to a phone number",
   tags: ["Notifications"],
+  summary: "Send SMS",
   request: {
     body: {
       content: {
         "application/json": {
           schema: NotificationRequestSchema,
+          example: {
+            type: "sms",
+            recipient: "+1234567890",
+            message: "Your verification code is: 123456",
+          },
         },
       },
     },
@@ -90,22 +120,38 @@ registry.registerPath({
       content: {
         "application/json": {
           schema: NotificationResponseSchema,
+          example: {
+            success: true,
+            id: "123e4567-e89b-12d3-a456-426614174000",
+            response: {
+              messageId: "msg-123",
+              status: "DELIVERED",
+            },
+          },
         },
       },
     },
     400: {
-      description: "Invalid request parameters",
+      description: "Invalid request parameters or validation error",
       content: {
         "application/json": {
           schema: ErrorSchema,
+          example: {
+            status: "error",
+            message: "Invalid phone number format or missing required fields",
+          },
         },
       },
     },
     500: {
-      description: "Server error",
+      description: "Internal server error or service unavailable",
       content: {
         "application/json": {
           schema: ErrorSchema,
+          example: {
+            status: "error",
+            message: "Failed to send SMS due to service error",
+          },
         },
       },
     },
@@ -118,12 +164,41 @@ export const openApiDocument = generator.generateDocument({
   info: {
     title: "Notification Service API",
     version: "1.0.0",
-    description: "API for sending email and SMS notifications",
+    description: `API for sending email and SMS notifications.
+
+## Features
+- Send email notifications with optional file attachments
+- Send SMS notifications to phone numbers
+- File size limit: 2MB
+- Support for both email and phone number formats
+- Detailed error responses
+
+## Authentication
+This API requires authentication using an API key.
+
+## Rate Limiting
+- 100 requests per minute per IP
+- 1000 requests per hour per API key
+
+## File Attachments
+- Supported formats: PDF, DOC, DOCX, JPG, PNG
+- Maximum file size: 2MB
+- Only available for email notifications`,
   },
   servers: [
     {
       url: "http://localhost:3000",
       description: "Development server",
+    },
+    {
+      url: "https://api.example.com",
+      description: "Production server",
+    },
+  ],
+  tags: [
+    {
+      name: "Notifications",
+      description: "Endpoints for sending email and SMS notifications",
     },
   ],
 })
