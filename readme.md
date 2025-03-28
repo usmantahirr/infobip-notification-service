@@ -8,6 +8,18 @@
 
 A robust TypeScript-based service for sending email and SMS notifications using Infobip's API. This service provides a simple and secure way to integrate Infobip's messaging capabilities into your applications.
 
+## Technical Deep Dive
+
+For a detailed technical overview of the project, including architecture decisions, technology choices, and implementation details, check out our [Technical Blog Post](TECHNICAL_BLOG.md). This comprehensive guide covers:
+
+- Technology stack and reasoning behind each choice
+- Architectural decisions and design patterns
+- Security implementations and best practices
+- Error handling strategies
+- API documentation approach
+- Technical challenges and solutions
+- Future improvements and scaling considerations
+
 ## Features
 
 - 📧 Send email notifications with optional file attachments
