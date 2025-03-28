@@ -10,41 +10,43 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Initial release
-- Email notification support with file attachments
-- SMS notification support
-- OpenAPI/Swagger documentation
+- Email and SMS notification support via Infobip API
+- OpenAPI documentation
 - Rate limiting
 - Request logging
-- Input validation using Zod
+- Input validation
 - Error handling middleware
-- Security middleware (Helmet, CORS)
+- Security middleware
 
 ### Features
 
-- Support for sending emails with optional file attachments
-- Support for sending SMS messages
-- File size limit of 2MB for attachments
-- Support for PDF, DOC, DOCX, JPG, PNG file types
-- Rate limiting (100 requests/minute per IP, 1000/hour per API key)
-- Comprehensive API documentation
+- Send emails with attachments
+- Send SMS messages
+- File size limit of 2MB
+- Supported file types: PDF, DOC, DOCX, JPG, PNG
+- Rate limiting: 100 requests/minute per IP, 1000 requests/hour per API key
+- API documentation with Swagger UI
 - TypeScript support
 - Express.js framework
 
 ### Security
 
-- Input validation
+- Input validation using Zod
 - Rate limiting
-- Helmet security headers
+- Security headers
 - CORS configuration
 - Environment variable validation
-- File type validation
-- File size restrictions
+- File type and size restrictions
 
 ### Documentation
 
-- OpenAPI/Swagger documentation
-- Comprehensive README
+- OpenAPI documentation
+- README
 - Contributing guidelines
-- Code of Conduct
-- Security Policy
+- Code of conduct
+- Security policy
 - Changelog
+
+## Maintainers
+
+- Usman Tahir <hello@usman.tahir.com>

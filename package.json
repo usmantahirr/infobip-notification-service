@@ -25,16 +25,16 @@
     "email-service",
     "sms-service"
   ],
-  "author": "Infobip Notification Service Contributors",
+  "author": "Usman Tahir <hello@usman.tahir.com>",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/yourusername/infobip-notification-service.git"
+    "url": "git+https://github.com/usmantahirr/infobip-notification-service.git"
   },
   "bugs": {
-    "url": "https://github.com/yourusername/infobip-notification-service/issues"
+    "url": "https://github.com/usmantahirr/infobip-notification-service/issues"
   },
-  "homepage": "https://github.com/yourusername/infobip-notification-service#readme",
+  "homepage": "https://github.com/usmantahirr/infobip-notification-service#readme",
   "dependencies": {
     "@asteasolutions/zod-to-openapi": "^7.3.0",
     "@infobip-api/sdk": "^0.3.2",

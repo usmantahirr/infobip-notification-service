@@ -30,7 +30,7 @@ A robust TypeScript-based service for sending email and SMS notifications using 
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/yourusername/infobip-notification-service.git
+   git clone https://github.com/usmantahirr/infobip-notification-service.git
    cd infobip-notification-service
    ```
 
@@ -166,7 +166,10 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Support
 
-For support, please open an issue in the GitHub repository or contact the maintainers.
+For support, please:
+
+- Open an issue in the [GitHub repository](https://github.com/usmantahirr/infobip-notification-service/issues)
+- Contact the maintainer at [hello@usman.tahir.com](mailto:hello@usman.tahir.com)
 
 ## Acknowledgments
 
