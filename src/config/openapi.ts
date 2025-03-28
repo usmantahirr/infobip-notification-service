@@ -1,9 +1,124 @@
-export const openApiDocument = {
+import {
+  OpenAPIRegistry,
+  OpenApiGeneratorV3,
+} from "@asteasolutions/zod-to-openapi"
+
+import {
+  ErrorSchema,
+  MessageSchema,
+  NotificationRequestSchema,
+  NotificationResponseSchema,
+  NotificationTypeSchema,
+  RecipientSchema,
+  SubjectSchema,
+} from "../schemas"
+
+const registry = new OpenAPIRegistry()
+
+registry.register("NotificationType", NotificationTypeSchema)
+registry.register("Recipient", RecipientSchema)
+registry.register("Message", MessageSchema)
+registry.register("Subject", SubjectSchema)
+registry.register("NotificationRequest", NotificationRequestSchema)
+registry.register("NotificationResponse", NotificationResponseSchema)
+registry.register("Error", ErrorSchema)
+
+registry.registerPath({
+  method: "post",
+  path: "/notifications/email",
+  description: "Send an email notification",
+  tags: ["Notifications"],
+  request: {
+    body: {
+      content: {
+        "multipart/form-data": {
+          schema: NotificationRequestSchema,
+          encoding: {
+            attachment: {
+              contentType: "application/octet-stream",
+            },
+          },
+        },
+      },
+    },
+  },
+  responses: {
+    200: {
+      description: "Email sent successfully",
+      content: {
+        "application/json": {
+          schema: NotificationResponseSchema,
+        },
+      },
+    },
+    400: {
+      description: "Invalid request parameters",
+      content: {
+        "application/json": {
+          schema: ErrorSchema,
+        },
+      },
+    },
+    500: {
+      description: "Server error",
+      content: {
+        "application/json": {
+          schema: ErrorSchema,
+        },
+      },
+    },
+  },
+})
+
+registry.registerPath({
+  method: "post",
+  path: "/notifications/sms",
+  description: "Send an SMS notification",
+  tags: ["Notifications"],
+  request: {
+    body: {
+      content: {
+        "application/json": {
+          schema: NotificationRequestSchema,
+        },
+      },
+    },
+  },
+  responses: {
+    200: {
+      description: "SMS sent successfully",
+      content: {
+        "application/json": {
+          schema: NotificationResponseSchema,
+        },
+      },
+    },
+    400: {
+      description: "Invalid request parameters",
+      content: {
+        "application/json": {
+          schema: ErrorSchema,
+        },
+      },
+    },
+    500: {
+      description: "Server error",
+      content: {
+        "application/json": {
+          schema: ErrorSchema,
+        },
+      },
+    },
+  },
+})
+
+const generator = new OpenApiGeneratorV3(registry.definitions)
+export const openApiDocument = generator.generateDocument({
   openapi: "3.0.0",
   info: {
-    title: "Email Notification Service API",
+    title: "Notification Service API",
     version: "1.0.0",
-    description: "API documentation for the Email Notification Service",
+    description: "API for sending email and SMS notifications",
   },
   servers: [
     {
@@ -11,172 +126,4 @@ export const openApiDocument = {
       description: "Development server",
     },
   ],
-  paths: {
-    "/api/notifications/send": {
-      post: {
-        description: "Send a notification (email or SMS)",
-        tags: ["Notifications"],
-        requestBody: {
-          content: {
-            "multipart/form-data": {
-              schema: {
-                type: "object",
-                required: ["type", "recipient", "message"],
-                properties: {
-                  type: {
-                    type: "string",
-                    enum: ["email", "sms"],
-                    description: "Type of notification to send",
-                  },
-                  recipient: {
-                    type: "string",
-                    description:
-                      "Email address or phone number of the recipient",
-                  },
-                  message: {
-                    type: "string",
-                    description: "Content of the notification",
-                  },
-                  subject: {
-                    type: "string",
-                    description:
-                      "Subject line for email notifications (optional)",
-                  },
-                },
-              },
-              encoding: {
-                attachment: {
-                  contentType: "application/octet-stream",
-                },
-              },
-            },
-          },
-        },
-        responses: {
-          "200": {
-            description: "Notification sent successfully",
-            content: {
-              "application/json": {
-                schema: {
-                  type: "object",
-                  properties: {
-                    success: {
-                      type: "boolean",
-                      description:
-                        "Whether the notification was sent successfully",
-                    },
-                    id: {
-                      type: "string",
-                      description: "Unique identifier of the notification",
-                    },
-                    response: {
-                      type: "object",
-                      description: "Response from the notification service",
-                    },
-                  },
-                },
-              },
-            },
-          },
-          "400": {
-            description: "Invalid request parameters",
-            content: {
-              "application/json": {
-                schema: {
-                  type: "object",
-                  properties: {
-                    status: {
-                      type: "string",
-                      enum: ["error"],
-                    },
-                    message: {
-                      type: "string",
-                      description: "Error message",
-                    },
-                  },
-                },
-              },
-            },
-          },
-          "500": {
-            description: "Server error",
-            content: {
-              "application/json": {
-                schema: {
-                  type: "object",
-                  properties: {
-                    status: {
-                      type: "string",
-                      enum: ["error"],
-                    },
-                    message: {
-                      type: "string",
-                      description: "Error message",
-                    },
-                  },
-                },
-              },
-            },
-          },
-        },
-      },
-    },
-  },
-  components: {
-    schemas: {
-      NotificationRequest: {
-        type: "object",
-        required: ["type", "recipient", "message"],
-        properties: {
-          type: {
-            type: "string",
-            enum: ["email", "sms"],
-            description: "Type of notification to send",
-          },
-          recipient: {
-            type: "string",
-            description: "Email address or phone number of the recipient",
-          },
-          message: {
-            type: "string",
-            description: "Content of the notification",
-          },
-          subject: {
-            type: "string",
-            description: "Subject line for email notifications (optional)",
-          },
-        },
-      },
-      NotificationResponse: {
-        type: "object",
-        properties: {
-          success: {
-            type: "boolean",
-            description: "Whether the notification was sent successfully",
-          },
-          id: {
-            type: "string",
-            description: "Unique identifier of the notification",
-          },
-          response: {
-            type: "object",
-            description: "Response from the notification service",
-          },
-        },
-      },
-      Error: {
-        type: "object",
-        properties: {
-          status: {
-            type: "string",
-            enum: ["error"],
-          },
-          message: {
-            type: "string",
-            description: "Error message",
-          },
-        },
-      },
-    },
-  },
-}
+})
