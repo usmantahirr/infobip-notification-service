@@ -11,7 +11,7 @@
 We take the security of this project seriously. If you discover a security vulnerability, please follow these steps:
 
 1. **Do not** open a public issue for the vulnerability
-2. Email your findings to [INSERT SECURITY CONTACT EMAIL]
+2. Email your findings to [hello@usman.tahir.com](mailto:hello@usman.tahir.com)
 3. Provide detailed information about the vulnerability:
    - Description of the issue
    - Steps to reproduce
