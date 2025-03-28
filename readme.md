@@ -20,6 +20,17 @@ For a detailed technical overview of the project, including architecture decisio
 - Technical challenges and solutions
 - Future improvements and scaling considerations
 
+## System Architecture
+
+For a visual representation of the system architecture, including component relationships, data flow, and security implementation, check out our [Architecture Diagrams](ARCHITECTURE.md). The diagrams include:
+
+- System overview and component relationships
+- Request flow and processing
+- Component architecture and dependencies
+- Security implementation layers
+- Error handling flow
+- Data validation process
+
 ## Features
 
 - 📧 Send email notifications with optional file attachments
