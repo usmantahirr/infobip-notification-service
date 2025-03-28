@@ -1,24 +1,29 @@
 import { NextFunction, Request, Response } from "express"
 
 import logger from "../config/logger"
+import { AppError } from "../errors/AppError"
 
-interface ErrorType extends Error {
-  status?: number
-  details?: any
-}
+const errorHandler = (
+  err: Error,
+  req: Request,
+  res: Response,
+  next: NextFunction,
+): void => {
+  logger.error(`Error: ${err.message}`)
 
-const errorHandler = (err: ErrorType, req: Request, res: Response): void => {
-  const statusCode = err.status || 500
-  const errorMessage = err.message || "Internal Server Error"
-
-  logger.error(`Error: ${errorMessage}`)
-  if (err.details) {
-    logger.error(`Details: ${JSON.stringify(err.details)}`)
+  if (err instanceof AppError) {
+    res.status(err.statusCode).json({
+      status: "error",
+      message: err.message,
+      ...(process.env.NODE_ENV === "development" && { stack: err.stack }),
+    })
+    return
   }
 
-  res.status(statusCode).json({
-    success: false,
-    message: errorMessage,
+  // Handle unexpected errors
+  res.status(500).json({
+    status: "error",
+    message: "Internal server error",
     ...(process.env.NODE_ENV === "development" && { stack: err.stack }),
   })
 }

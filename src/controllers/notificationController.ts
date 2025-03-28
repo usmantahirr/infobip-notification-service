@@ -4,8 +4,10 @@ import { v4 as uuidv4 } from "uuid"
 
 import logger from "../config/logger"
 import upload from "../config/upload"
+import { FileError, ValidationError } from "../errors/AppError"
 import { Notification } from "../models/notification"
 import { NotificationService } from "../services/notificationService"
+import { notificationSchema } from "../validations/notificationSchema"
 
 export class NotificationController {
   private notificationService: NotificationService
@@ -22,21 +24,23 @@ export class NotificationController {
   ): Promise<void> {
     upload.single("attachment")(req, res, async (err) => {
       if (err) {
-        return res.status(400).json({ error: err.message }) // Return validation error
+        return next(new FileError(err.message))
       }
 
       try {
-        const { type, recipient, message, subject } = req.body
-        if (!type || !recipient || !message) {
-          res.status(400).json({
-            error: "Missing required fields: type, recipient, message",
-          })
-          return
+        // Validate request body
+        const validationResult = notificationSchema.safeParse(req.body)
+        if (!validationResult.success) {
+          const errors = validationResult.error.errors.map((err) => err.message)
+          return next(new ValidationError(errors.join(", ")))
         }
 
+        const { type, recipient, message, subject } = validationResult.data
+
         if (type === "sms" && req.file) {
-          res.status(400).json({ error: "Attachments are not allowed for SMS" })
-          return
+          return next(
+            new ValidationError("Attachments are not allowed for SMS"),
+          )
         }
 
         const notification: Notification = {
@@ -45,18 +49,20 @@ export class NotificationController {
           recipient,
           message,
           subject,
-          file: req.file, // Attach only if exists
+          file: req.file,
           createdAt: new Date(),
         }
 
         const response =
           await this.notificationService.sendNotification(notification)
-        res
-          .status(200)
-          .json({ success: true, id: notification.id, response: response.data })
+        res.status(200).json({
+          success: true,
+          id: notification.id,
+          response: response.data,
+        })
       } catch (error) {
         logger.error(`NotificationController error: ${error}`)
-        next(error) // Pass error to centralized handler
+        next(error)
       }
     })
   }
